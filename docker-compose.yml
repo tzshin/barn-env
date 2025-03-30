@@ -3,7 +3,7 @@ services:
     build: .
     user: ${USER_ID:-1000}:${GROUP_ID:-1000}
     volumes:
-      - ${TBC_DIR}:/workspace/${TBC_BASENAME:-tbc}
+      - ${TBC_DIR}:/workspace/jackal_ws/src/${TBC_BASENAME:-tbc}
       - ${NAV_DIR}:/workspace/${NAV_BASENAME:-nav}
     network_mode: host
     tty: true

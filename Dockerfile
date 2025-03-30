@@ -26,13 +26,12 @@ USER root
 RUN apt update && apt install -y \
     locales \
     curl \
-    gnupg2 \
     lsb-release \
     git \
     vim \
     python3-pip \
     python-is-python3 \
-    iproute2 \
+    cmake \
     make \
     tini \
     && rm -rf /var/lib/apt/lists/*
@@ -62,3 +61,30 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 
 # Keeps the container running in idle mode after startup
 CMD ["tail", "-f", "/dev/null"]
+
+# -----------------------------------------------------------------------
+# BARN Challenge Specific Setup
+# -----------------------------------------------------------------------
+USER $USER_NAME
+
+# Install Python dependencies
+RUN pip3 install --upgrade pip && \
+    pip3 install defusedxml rospkg netifaces numpy
+
+# Setup ROS workspace
+WORKDIR /workspace/jackal_ws/src
+RUN git clone https://github.com/jackal/jackal.git --branch noetic-devel \
+    && git clone https://github.com/jackal/jackal_simulator.git --branch melodic-devel \
+    && git clone https://github.com/jackal/jackal_desktop.git --branch melodic-devel \
+    && git clone https://github.com/utexas-bwi/eband_local_planner.git
+
+# Install ROS dependencies
+WORKDIR /workspace/jackal_ws
+RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then \
+        rosdep init; \
+    fi && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src --rosdistro=noetic -y
+
+# Fix the ownership issue
+RUN chown -R $USER_NAME:$USER_NAME /workspace/jackal_ws
