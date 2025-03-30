@@ -4,11 +4,19 @@ A containerized ROS Noetic development environment.
 
 ## Quick Start
 
+### Option 1: Using VS Code Dev Containers
+
+1. Install VS Code with the "Remote - Containers" extension
+2. Open this folder in VS Code
+3. When prompted, click "Reopen in Container" or use the command palette (F1) and select "Remote-Containers: Reopen in Container"
+
+### Option 2: Using Docker Compose Directly
+
 ```bash
-# Start container
+# Build and run the container
 docker compose up -d
 
-# Enter container
+# Enter the container
 docker compose exec ros bash
 ```
 
