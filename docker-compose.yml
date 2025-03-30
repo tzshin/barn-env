@@ -3,7 +3,8 @@ services:
     build: .
     user: ${USER_ID:-1000}:${GROUP_ID:-1000}
     volumes:
-      - ${PROJECT_DIR}:/workspace/${PROJECT_BASENAME:-project}
+      - ${TBC_DIR}:/workspace/${TBC_BASENAME:-tbc}
+      - ${NAV_DIR}:/workspace/${NAV_BASENAME:-nav}
     network_mode: host
     tty: true
     stdin_open: true
